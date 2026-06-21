@@ -1,0 +1,10 @@
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
+node_modules/
+.tools/
+.tools/gh.zip
+tanandthao-deploy.zip
+package-lock.json

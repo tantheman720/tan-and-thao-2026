@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tan &amp; Thao · Wedding Invitation</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,300;1,400&family=Inter:wght@300;400;500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/general-sans" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            soft: '#16161A',
+            panel: '#1B1B1F',
+            field: '#212125',
+            primary: '#F4F3F0',
+            secondary: '#A4A4A8',
+            accent: '#DAD8D3',
+            'accent-dim': '#BFBDB8',
+            edge: '#33333A',
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: #0E0E11;
+      /* Classic, near-black neutral with a very subtle tonal shift down the page */
+      background-image: linear-gradient(180deg,
+        #151519 0%,
+        #101013 32%,
+        #0D0D10 58%,
+        #131316 82%,
+        #0B0B0E 100%);
+    }
+
+    .font-display { font-family: 'Jost', system-ui, sans-serif; }
+    .font-serif { font-family: 'Cormorant Garamond', Georgia, serif; }
+    .font-sans { font-family: 'Inter', system-ui, sans-serif; }
+
+    /* Photo that feathers into the background, softest at the corners */
+    .photo {
+      position: relative;
+      -webkit-mask-image: radial-gradient(105% 105% at 50% 50%, #000 56%, transparent 90%);
+              mask-image: radial-gradient(105% 105% at 50% 50%, #000 56%, transparent 90%);
+    }
+    .photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .photo::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 45%, rgba(11,11,14,0.5) 100%);
+      pointer-events: none;
+    }
+
+    /* Attendance radio cards */
+    .attend-radio { position: absolute; opacity: 0; width: 0; height: 0; }
+    .attend-card {
+      display: flex; align-items: flex-start; gap: 0.55rem;
+      height: 100%;
+      cursor: pointer;
+      border: 1px solid #33333A;
+      border-radius: 4px;
+      padding: 1rem 1rem;
+      background: #212125;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+    .attend-radio:checked + .attend-card {
+      border-color: #F4F3F0;
+      background: rgba(244, 243, 240, 0.08);
+    }
+    .attend-radio:focus-visible + .attend-card {
+      outline: 2px solid #F4F3F0;
+      outline-offset: 2px;
+    }
+    /* Radio indicator */
+    .attend-dot {
+      flex: none;
+      width: 16px; height: 16px;
+      margin-top: 3px;
+      border: 1px solid #5A5A62;
+      border-radius: 9999px;
+      position: relative;
+      transition: border-color 0.15s ease;
+    }
+    .attend-radio:checked + .attend-card .attend-dot { border-color: #F4F3F0; }
+    .attend-radio:checked + .attend-card .attend-dot::after {
+      content: ""; position: absolute; inset: 3px;
+      background: #F4F3F0; border-radius: 9999px;
+    }
+    /* Check / X icon */
+    .attend-icon { flex: none; margin-top: 2px; margin-left: 0.4rem; color: #7C7C84; transition: color 0.15s ease; }
+    .attend-radio:checked + .attend-card .attend-icon { color: #F4F3F0; }
+
+    .rsvp-input {
+      width: 100%;
+      background: #18181C;
+      border: 1px solid #2E2E34;
+      border-radius: 4px;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      color: #F4F3F0;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+    .rsvp-input::placeholder { color: rgba(164, 164, 168, 0.5); }
+    .rsvp-input:focus {
+      outline: none;
+      border-color: #5A5A62;
+      background: #1C1C20;
+    }
+    .rsvp-input--optional {
+      font-size: 0.9375rem;
+      padding: 0.625rem 0.875rem;
+      background: #16161A;
+      border-color: #28282E;
+    }
+    .rsvp-submit {
+      width: 100%;
+      min-height: 52px;
+      margin-top: 0.5rem;
+      background: #DAD8D3;
+      color: #0E0E11;
+      border: 1px solid #C8C6C0;
+      border-radius: 4px;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+    }
+    .rsvp-submit:hover:not(:disabled) { background: #F4F3F0; border-color: #F4F3F0; }
+    .rsvp-submit:active:not(:disabled) { transform: scale(0.99); }
+    .rsvp-submit:disabled { opacity: 0.65; cursor: not-allowed; }
+    .rsvp-status {
+      margin-top: 1rem;
+      padding: 0.875rem 1rem;
+      border-radius: 4px;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      text-align: center;
+    }
+    .rsvp-status[hidden] { display: none; }
+    .rsvp-status--success {
+      background: rgba(72, 120, 88, 0.18);
+      border: 1px solid rgba(120, 180, 140, 0.35);
+      color: #B8E0C4;
+    }
+    .rsvp-status--error {
+      background: rgba(140, 72, 72, 0.18);
+      border: 1px solid rgba(200, 120, 120, 0.35);
+      color: #E8B4B4;
+    }
+    .rsvp-guest-panel {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.25s ease, opacity 0.2s ease, margin 0.2s ease;
+      margin-top: 0;
+    }
+    .rsvp-guest-panel.is-open {
+      max-height: 120px;
+      opacity: 1;
+      margin-top: 0.75rem;
+    }
+
+    .nav-blur { background: rgba(14, 14, 17, 0.82); backdrop-filter: blur(8px); }
+
+    body[data-hero="b"] .hero--full { display: none; }
+    body[data-hero="a"] .hero--split { display: none; }
+
+    .hero-media {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background-color: #0E0E11;
+    }
+    .hero--full .hero-media img {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 108%;
+      top: -5%;
+      object-fit: cover;
+      object-position: 58% 62%;
+    }
+    @media (max-width: 767px) {
+      .hero--full .hero-media img {
+        height: 106%;
+        top: -3%;
+        object-position: 55% 58%;
+      }
+    }
+    .hero-scrim-top {
+      position: absolute;
+      inset-inline: 0;
+      top: 0;
+      height: 11rem;
+      z-index: 1;
+      pointer-events: none;
+      background: linear-gradient(to bottom, #0E0E11 0%, rgba(14,14,17,0.88) 35%, transparent 100%);
+    }
+    @media (min-width: 768px) {
+      .hero-scrim-top { height: 13rem; }
+    }
+    .hero-scrim-bottom {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: linear-gradient(to top, rgba(14,14,17,0.85) 0%, rgba(14,14,17,0.35) 35%, transparent 55%);
+    }
+    .hero-scrim-radial {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: radial-gradient(
+        ellipse 75% 55% at 50% 58%,
+        rgba(14, 14, 17, 0.55) 0%,
+        rgba(14, 14, 17, 0.22) 45%,
+        transparent 72%
+      );
+    }
+    .hero-scrim-side {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: linear-gradient(to right, transparent 0%, rgba(14,14,17,0.06) 50%, rgba(14,14,17,0.28) 100%);
+    }
+    .hero-copy {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      pointer-events: none;
+    }
+    .hero-copy-inner {
+      width: 100%;
+      max-width: 72rem;
+      margin-inline: auto;
+      min-height: min(52vh, 460px);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: 24px 1.25rem 24px;
+      text-align: center;
+      pointer-events: auto;
+      transform: translateY(calc(-6vh + 64px));
+    }
+    @media (min-width: 768px) {
+      .hero-copy-inner {
+        min-height: min(50vh, 500px);
+        padding: 32px 3rem 40px;
+        transform: translateY(calc(-8vh + 64px));
+      }
+    }
+    .hero-title {
+      font-family: 'General Sans', 'Inter', system-ui, sans-serif;
+      font-weight: 300;
+      letter-spacing: 0.02em;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+      margin-bottom: 1.5rem;
+      line-height: 1;
+    }
+    .hero-title .hero-name {
+      font-size: clamp(3.25rem, 9vw, 5.25rem);
+      line-height: 1;
+      font-weight: 300;
+    }
+    .hero-title .hero-and {
+      font-family: 'General Sans', 'Inter', system-ui, sans-serif;
+      font-size: clamp(1.35rem, 3.5vw, 2.25rem);
+      font-weight: 300;
+      font-style: normal;
+      opacity: 0.75;
+      margin-inline: 0.45em;
+    }
+    .hero--full .hero-date,
+    .hero--full .hero-time,
+    .hero--full .hero-venue-name,
+    .hero--full .hero-venue-place {
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+    }
+    .hero-date {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.06em;
+      color: rgba(244, 243, 240, 0.92);
+      margin-bottom: 0.25rem;
+    }
+    .hero-time {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.08em;
+      color: rgba(244, 243, 240, 0.72);
+      margin-bottom: 1.125rem;
+    }
+    .hero-venue-name {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 0.8125rem;
+      letter-spacing: 0.08em;
+      color: rgba(244, 243, 240, 0.78);
+      margin-bottom: 0.25rem;
+    }
+    .hero-venue-place {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      color: rgba(244, 243, 240, 0.55);
+      margin-bottom: 1.75rem;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .hero--full .hero-actions {
+      justify-content: center;
+    }
+    .hero-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 48px;
+      padding: 0 34px;
+      border-radius: 999px;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      font-weight: 400;
+      text-decoration: none;
+      transition: all 180ms ease;
+    }
+    .hero--split .hero-button {
+      flex: none;
+    }
+    .hero-button.primary {
+      background: #f4eee6;
+      color: #171717;
+      border: 1px solid #f4eee6;
+    }
+    .hero-button.secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: #f4eee6;
+      border: 1px solid rgba(244, 238, 230, 0.58);
+    }
+    .hero-button.primary:hover {
+      transform: translateY(-1px);
+      background: #ebe4d9;
+    }
+    .hero-button.secondary:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.10);
+    }
+    .hero-button:focus-visible {
+      outline: 2px solid #F4F3F0;
+      outline-offset: 3px;
+    }
+    .hero-button.primary:focus-visible {
+      outline-color: #171717;
+      box-shadow: 0 0 0 3px rgba(244, 238, 230, 0.5);
+    }
+
+    /* Variant B — editorial split */
+    .hero-split {
+      display: grid;
+      grid-template-columns: 1fr;
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
+    @media (min-width: 768px) {
+      .hero-split {
+        grid-template-columns: 1fr 1.15fr;
+      }
+    }
+    .hero-split-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: #0E0E11;
+      padding: 6rem 1.5rem 3rem;
+      order: 2;
+    }
+    @media (min-width: 768px) {
+      .hero-split-copy {
+        order: 1;
+        padding: 5rem 3rem;
+        min-height: 100vh;
+        min-height: 100dvh;
+      }
+    }
+    @media (min-width: 1024px) {
+      .hero-split-copy { padding: 5rem 4rem; }
+    }
+    .hero-split-copy .hero-title {
+      text-shadow: none;
+    }
+    .hero-split-media {
+      position: relative;
+      min-height: 55vh;
+      order: 1;
+      overflow: hidden;
+      background: #0E0E11;
+    }
+    @media (min-width: 768px) {
+      .hero-split-media {
+        order: 2;
+        min-height: 100vh;
+        min-height: 100dvh;
+      }
+    }
+    .hero-split-media img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 60% 55%;
+    }
+    @media (max-width: 639px) {
+      .hero--full .hero-actions {
+        flex-direction: column;
+        width: 100%;
+      }
+      .hero--full .hero-button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body class="text-primary antialiased font-sans" data-hero="a">
+  <script>
+    (function () {
+      var hero = new URLSearchParams(location.search).get('hero');
+      document.body.dataset.hero = hero === 'b' ? 'b' : 'a';
+    })();
+  </script>
+
+  <!-- Sticky Navigation -->
+  <nav class="fixed top-0 inset-x-0 z-50 nav-blur border-b border-edge">
+    <div class="max-w-6xl mx-auto px-5 md:px-12 h-16 flex items-center justify-between">
+      <a href="#top" class="font-display text-xl md:text-2xl tracking-wide text-primary font-normal">T <span class="text-secondary">&amp;</span> T</a>
+      <div class="flex items-center gap-5 md:gap-8 font-sans text-sm tracking-[0.08em]">
+        <a href="#quick-details" class="text-secondary hover:text-primary transition-colors duration-150">Details</a>
+        <a href="#story" class="text-secondary hover:text-primary transition-colors duration-150 hidden sm:inline">Our Story</a>
+        <a href="#rsvp" class="text-[#0E0E11] bg-white hover:bg-white/85 transition-colors duration-150 px-4 py-2 rounded-sm font-medium">RSVP</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <div id="top">
+
+    <!-- Variant A: full-image cinematic (default) -->
+    <section class="hero hero--full relative h-screen min-h-screen overflow-hidden" aria-label="Wedding invitation">
+
+      <div class="hero-media" aria-hidden="true">
+        <img src="Da Lat Pre-shoots/Big landscape - On boat.JPG" alt="">
+      </div>
+      <div class="hero-scrim-top" aria-hidden="true"></div>
+      <div class="hero-scrim-bottom" aria-hidden="true"></div>
+      <div class="hero-scrim-radial" aria-hidden="true"></div>
+      <div class="hero-scrim-side" aria-hidden="true"></div>
+
+      <div class="hero-copy">
+        <div class="hero-copy-inner">
+        <h1 class="hero-title">
+          <span class="flex items-baseline justify-center flex-wrap">
+            <span class="hero-name">Tan</span>
+            <span class="hero-and">and</span>
+            <span class="hero-name">Thao</span>
+          </span>
+        </h1>
+        <p class="hero-date">August 7, 2026</p>
+        <p class="hero-time">5:00 PM</p>
+        <p class="hero-venue-name">LaCasa</p>
+        <p class="hero-venue-place">District 2, Ho Chi Minh City</p>
+        <div class="hero-actions">
+          <a href="#rsvp" class="hero-button primary">RSVP</a>
+          <a href="#quick-details" class="hero-button secondary">View Invitation</a>
+        </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Variant B: editorial split (?hero=b) -->
+    <section class="hero hero--split relative overflow-hidden" aria-label="Wedding invitation">
+
+      <div class="hero-split">
+        <div class="hero-split-copy">
+          <h1 class="hero-title">
+            <span class="flex items-baseline flex-wrap">
+              <span class="hero-name">Tan</span>
+              <span class="hero-and">and</span>
+              <span class="hero-name">Thao</span>
+            </span>
+          </h1>
+          <p class="hero-date">August 7, 2026</p>
+          <p class="hero-time">5:00 PM</p>
+          <p class="hero-venue-name">LaCasa</p>
+          <p class="hero-venue-place">District 2, Ho Chi Minh City</p>
+          <div class="hero-actions">
+            <a href="#rsvp" class="hero-button primary">RSVP</a>
+            <a href="#quick-details" class="hero-button secondary">View Invitation</a>
+          </div>
+        </div>
+        <div class="hero-split-media" aria-hidden="true">
+          <img src="Da Lat Pre-shoots/Big landscape - On boat.JPG" alt="">
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <!-- Quick Details Strip -->
+  <section id="quick-details" class="bg-soft border-y border-edge py-16 md:py-20">
+    <div class="max-w-5xl mx-auto px-6 md:px-12">
+      <div class="grid sm:grid-cols-3 gap-12 sm:gap-8 text-center sm:text-left divide-y sm:divide-y-0 sm:divide-x divide-edge">
+
+        <div class="pt-8 sm:pt-0 sm:pr-8">
+          <p class="font-sans text-sm tracking-[0.12em] text-secondary mb-4">When</p>
+          <p class="font-display text-3xl md:text-4xl text-primary font-light leading-tight">August 7, 2026</p>
+          <p class="font-sans text-base text-secondary mt-2 leading-relaxed">
+            5:00 PM Vows · 6:00 PM Dinner<br>
+            <span class="text-sm text-secondary/70">Lễ Thành Hôn · Tiệc Tối</span>
+          </p>
+        </div>
+
+        <div class="pt-8 sm:pt-0 sm:px-8">
+          <p class="font-sans text-sm tracking-[0.12em] text-secondary mb-4">Where</p>
+          <p class="font-display text-3xl md:text-4xl text-primary font-light leading-tight">Lacasa</p>
+          <p class="font-sans text-base text-secondary mt-2 leading-relaxed">
+            District 2, Ho Chi Minh City<br>
+            <a href="https://share.google/FCYQBPn6TT4AVnYfr" target="_blank" rel="noopener noreferrer" class="text-primary border-b border-white/40 hover:border-white transition-colors">View map · Xem bản đồ</a>
+          </p>
+        </div>
+
+        <div class="pt-8 sm:pt-0 sm:pl-8">
+          <p class="font-sans text-sm tracking-[0.12em] text-secondary mb-4">How</p>
+          <p class="font-display text-3xl md:text-4xl text-primary font-light leading-tight">RSVP</p>
+          <p class="font-sans text-base text-secondary mt-2 leading-relaxed">
+            Kindly respond by July 15<br>
+            <a href="#rsvp" class="text-primary border-b border-white/40 hover:border-white transition-colors">Respond now · Phản hồi</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Story Section -->
+  <section id="story" class="py-24 md:py-32">
+    <div class="max-w-6xl mx-auto px-6 md:px-12">
+      <div class="grid md:grid-cols-[0.85fr_1.15fr] gap-12 md:gap-16 items-center">
+
+        <div class="photo aspect-[3/4] mx-auto w-full max-w-sm">
+          <img src="Da Lat Pre-shoots/Portrait - face smiling front main.JPG" alt="Tan and Thao in Da Lat">
+        </div>
+
+        <div class="text-center md:text-left">
+          <h2 class="font-display text-3xl md:text-4xl font-light leading-tight mb-4 text-balance">
+            Celebrating with the people who brought us here
+          </h2>
+          <p class="font-serif text-lg md:text-xl text-secondary italic mb-10 leading-snug text-balance">
+            Cùng tri ân những người đã đồng hành với chúng tôi
+          </p>
+
+          <div class="space-y-1.5">
+            <p class="font-sans text-base md:text-lg text-primary/90 leading-relaxed">
+              Our story is a collection of everyone who has been through it with us. We just wanted to take a moment to pause, gather the people we love in one place, and appreciate the journey. Let's celebrate where we've been, where we're going, and the simple joy of being together. See everyone in Saigon!
+            </p>
+            <p class="font-serif text-base md:text-lg text-secondary italic leading-relaxed">
+              Hành trình của chúng tôi được dệt nên từ bóng dáng của tất cả những ai đã từng đi qua nó. Chúng tôi chỉ muốn dành một khoảng lặng để cùng ngồi lại, gom những người mình thương về một nơi, và cùng nhìn lại chặng đường đã qua. Hãy cùng gói ghém lại quá khứ, mở ra tương lai, và tận hưởng trọn vẹn niềm vui giản dị khi được ở bên nhau. Hẹn gặp mọi người ở Sài Gòn nhé.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Venue Section -->
+  <section id="venue" class="bg-soft border-y border-edge py-24 md:py-32">
+    <div class="max-w-5xl mx-auto px-6 md:px-12">
+
+      <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-center mb-16 md:mb-20">
+
+        <div class="text-center md:text-left">
+          <p class="font-sans text-sm tracking-[0.12em] text-secondary mb-5">Location · Địa điểm</p>
+          <h2 class="font-display text-5xl md:text-6xl font-light mb-4">Lacasa</h2>
+          <p class="font-sans text-base md:text-lg text-primary mb-2">District 2, Ho Chi Minh City</p>
+          <p class="font-sans text-base text-secondary leading-relaxed mb-7">
+            A riverside venue with a view of Landmark 81<br>
+            <span class="font-serif italic text-lg text-secondary/80">Bên sông Sài Gòn, ngắm Landmark 81</span>
+          </p>
+          <a href="https://share.google/FCYQBPn6TT4AVnYfr" target="_blank" rel="noopener noreferrer"
+             class="inline-block bg-white text-[#0E0E11] hover:bg-white/85 transition-colors duration-150 font-sans text-sm tracking-wide font-medium px-8 py-4 rounded-sm">
+            View map · Xem bản đồ
+          </a>
+        </div>
+
+        <div class="photo aspect-[4/3] mx-auto w-full max-w-md">
+          <img src="Lacasa photo.webp" alt="Lacasa riverside venue at sunset">
+        </div>
+
+      </div>
+
+      <!-- Timeline -->
+      <div class="max-w-3xl mx-auto">
+        <p class="font-sans text-sm tracking-[0.12em] text-secondary mb-8 text-center">Timeline · Chương trình</p>
+        <div class="grid sm:grid-cols-3 gap-10 sm:gap-8 text-center">
+          <div>
+            <p class="font-display text-4xl text-primary font-light">17:00</p>
+            <p class="font-sans text-base tracking-wide text-primary mt-2">Vows</p>
+            <p class="font-serif text-lg italic text-secondary">Lễ Nguyện Ước</p>
+          </div>
+          <div>
+            <p class="font-display text-4xl text-primary font-light">18:00</p>
+            <p class="font-sans text-base tracking-wide text-primary mt-2">Dinner</p>
+            <p class="font-serif text-lg italic text-secondary">Khai Tiệc</p>
+          </div>
+          <div>
+            <p class="font-display text-4xl text-primary font-light">Evening</p>
+            <p class="font-sans text-base tracking-wide text-primary mt-2">Music &amp; Dancing</p>
+            <p class="font-serif text-lg italic text-secondary">Khiêu Vũ Bên Sông</p>
+          </div>
+        </div>
+
+        <div class="w-full max-w-md mx-auto h-px bg-edge mt-12 mb-8"></div>
+
+        <p class="font-sans text-sm text-secondary text-center tracking-wide">
+          Dress code: Semi-formal · Light colors encouraged
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- RSVP Section -->
+  <section id="rsvp" class="bg-soft border-t border-edge py-24 md:py-32">
+    <div class="w-full max-w-xl mx-auto px-6">
+
+      <header class="text-center mb-12">
+        <p class="font-sans text-sm tracking-[0.12em] text-secondary mb-4">Response</p>
+        <h2 class="font-display text-5xl md:text-6xl font-light mb-3">RSVP</h2>
+        <p class="font-sans text-base text-secondary">
+          Kindly respond by July 15 <span class="mx-1">·</span> Phản hồi trước ngày 15 tháng 7
+        </p>
+      </header>
+
+      <form id="rsvp-form" method="POST" class="bg-panel border border-edge rounded-lg p-7 md:p-10 space-y-8">
+
+        <div>
+          <label for="full-name" class="block font-sans text-sm font-medium tracking-wide text-primary mb-1">
+            Full name
+          </label>
+          <p class="font-sans text-sm text-secondary mb-2">Họ &amp; Tên</p>
+          <input
+            type="text" id="full-name" name="full-name" required autocomplete="name"
+            class="rsvp-input"
+          >
+        </div>
+
+        <fieldset class="border-0 p-0 m-0">
+          <legend class="block font-sans text-sm font-medium tracking-wide text-primary mb-1">Will you be joining us?</legend>
+          <p class="font-sans text-sm text-secondary mb-3">Bạn sẽ tham dự chứ?</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="relative">
+              <input type="radio" id="attending-yes" name="attendance" value="accepts" class="attend-radio" required>
+              <label for="attending-yes" class="attend-card">
+                <span class="attend-dot"></span>
+                <svg class="attend-icon w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 13l4 4L19 7"/>
+                </svg>
+                <span class="min-w-0">
+                  <span class="block font-sans text-sm text-primary whitespace-nowrap">Accept</span>
+                  <span class="block font-serif text-sm italic text-secondary mt-0.5 whitespace-nowrap">Tham dự</span>
+                </span>
+              </label>
+            </div>
+            <div class="relative">
+              <input type="radio" id="attending-no" name="attendance" value="declines" class="attend-radio">
+              <label for="attending-no" class="attend-card">
+                <span class="attend-dot"></span>
+                <svg class="attend-icon w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M6 6l12 12M18 6L6 18"/>
+                </svg>
+                <span class="min-w-0">
+                  <span class="block font-sans text-sm text-primary whitespace-nowrap">Decline</span>
+                  <span class="block font-serif text-sm italic text-secondary mt-0.5 whitespace-nowrap">Không thể tham dự</span>
+                </span>
+              </label>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset id="guest-count-group" class="border-0 p-0 m-0 hidden">
+          <legend class="block font-sans text-sm font-medium tracking-wide text-primary mb-1">Who will be attending?</legend>
+          <p class="font-sans text-sm text-secondary mb-3">Ai sẽ tham dự?</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="relative">
+              <input type="radio" id="guest-myself" name="guest-count" value="myself" class="attend-radio" checked>
+              <label for="guest-myself" class="attend-card">
+                <span class="attend-dot"></span>
+                <span class="min-w-0">
+                  <span class="block font-sans text-sm text-primary whitespace-nowrap">Just me</span>
+                  <span class="block font-serif text-sm italic text-secondary mt-0.5 whitespace-nowrap">Chỉ mình tôi</span>
+                </span>
+              </label>
+            </div>
+            <div class="relative">
+              <input type="radio" id="guest-plus-one" name="guest-count" value="plus-one" class="attend-radio">
+              <label for="guest-plus-one" class="attend-card">
+                <span class="attend-dot"></span>
+                <span class="min-w-0">
+                  <span class="block font-sans text-sm text-primary whitespace-nowrap">Me + guest</span>
+                  <span class="block font-serif text-sm italic text-secondary mt-0.5 whitespace-nowrap">Tôi và người đi cùng</span>
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <div id="guest-name-panel" class="rsvp-guest-panel">
+            <label for="guest-name" class="block font-sans text-sm font-medium tracking-wide text-primary mb-1">
+              Guest name
+            </label>
+            <p class="font-sans text-sm text-secondary mb-2">Tên người đi cùng</p>
+            <input
+              type="text" id="guest-name" name="guest-name"
+              class="rsvp-input"
+              placeholder="Partner or guest name"
+            >
+          </div>
+        </fieldset>
+
+        <div class="border-t border-edge/60 pt-6 space-y-5">
+          <p class="font-sans text-xs tracking-[0.1em] text-secondary/70 text-center">
+            Optional · Không bắt buộc
+          </p>
+
+          <div>
+            <label for="dietary" class="block font-sans text-sm text-secondary mb-1">
+              Dietary restrictions
+            </label>
+            <p class="font-sans text-xs text-secondary/60 mb-2">Lưu ý dị ứng</p>
+            <input
+              type="text" id="dietary" name="dietary"
+              class="rsvp-input rsvp-input--optional"
+              placeholder="Any allergies or dietary needs?"
+            >
+          </div>
+
+          <div>
+            <label for="song" class="block font-sans text-sm text-secondary mb-1">
+              Song request (optional)
+            </label>
+            <p class="font-sans text-xs text-secondary/60 mb-2">Gửi tặng ca khúc</p>
+            <input
+              type="text" id="song" name="song"
+              class="rsvp-input rsvp-input--optional"
+              placeholder="What's your jam for the night?"
+            >
+          </div>
+        </div>
+
+        <button type="submit" class="rsvp-submit" id="rsvp-submit-btn">
+          Submit RSVP · Gửi xác nhận
+        </button>
+
+        <div id="rsvp-status" class="rsvp-status" hidden role="status" aria-live="polite"></div>
+
+      </form>
+    </div>
+  </section>
+
+  <!-- Closing cinematic section -->
+  <section class="relative w-full h-[50vh] md:h-[60vh] overflow-hidden -mt-12 md:-mt-24">
+    <img src="Da Lat Pre-shoots/Wide Nature Shot.JPG" alt="Tan and Thao in Da Lat"
+         class="absolute inset-0 w-full h-full object-cover object-[85%_68%]">
+    <div class="absolute inset-0" style="background:
+      linear-gradient(to bottom, #16161A 0%, rgba(22,22,26,0.85) 120px, rgba(22,22,26,0) 360px),
+      linear-gradient(to top, #0E0E11 0%, rgba(14,14,17,0) 300px);"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-16 md:py-20 text-center">
+    <p class="font-display text-3xl md:text-4xl font-light tracking-[0.08em]">Tan <span class="text-secondary">&amp;</span> Thao</p>
+    <p class="font-sans text-xs tracking-[0.25em] text-secondary mt-4">August 7, 2026</p>
+  </footer>
+
+  <script src="rsvp-config.js"></script>
+  <script>
+    (function () {
+      const form = document.getElementById('rsvp-form');
+      const submitBtn = document.getElementById('rsvp-submit-btn');
+      const statusEl = document.getElementById('rsvp-status');
+      const accept = document.getElementById('attending-yes');
+      const guestGroup = document.getElementById('guest-count-group');
+      const guestPanel = document.getElementById('guest-name-panel');
+      const guestName = document.getElementById('guest-name');
+      const plusOne = document.getElementById('guest-plus-one');
+      const config = window.WEDDING_RSVP_CONFIG || {};
+      let submitting = false;
+
+      function syncGuestUI() {
+        const accepted = accept?.checked;
+        guestGroup?.classList.toggle('hidden', !accepted);
+        if (!accepted) {
+          guestPanel?.classList.remove('is-open');
+          guestName?.removeAttribute('required');
+          return;
+        }
+        const showName = plusOne?.checked;
+        guestPanel?.classList.toggle('is-open', showName);
+        guestName?.toggleAttribute('required', showName);
+      }
+
+      function showStatus(type, message) {
+        if (!statusEl) return;
+        statusEl.hidden = false;
+        statusEl.className = 'rsvp-status rsvp-status--' + type;
+        statusEl.textContent = message;
+      }
+
+      function clearStatus() {
+        if (!statusEl) return;
+        statusEl.hidden = true;
+        statusEl.textContent = '';
+        statusEl.className = 'rsvp-status';
+      }
+
+      function attendanceLabel(value) {
+        return value === 'accepts' ? 'Accept' : 'Decline';
+      }
+
+      function guestCountLabel(value) {
+        return value === 'plus-one' ? 'Me + guest' : 'Just me';
+      }
+
+      async function handleSubmit(event) {
+        event.preventDefault();
+        if (submitting) return;
+
+        const endpoint = config.RSVP_SCRIPT_URL;
+        if (!endpoint || endpoint.includes('PASTE_YOUR_APPS_SCRIPT')) {
+          showStatus('error', 'RSVP is not configured yet. Please try again later.');
+          return;
+        }
+
+        const formData = new FormData(form);
+        const attendance = formData.get('attendance');
+        const payload = {
+          fullName: String(formData.get('full-name') || '').trim(),
+          attendance: attendanceLabel(String(attendance || '')),
+          guestCount: attendance === 'accepts'
+            ? guestCountLabel(String(formData.get('guest-count') || 'myself'))
+            : '',
+          guestName: String(formData.get('guest-name') || '').trim(),
+          dietary: String(formData.get('dietary') || '').trim(),
+          song: String(formData.get('song') || '').trim(),
+          notes: ''
+        };
+
+        submitting = true;
+        clearStatus();
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending…';
+
+        try {
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            mode: 'cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload)
+          });
+
+          let result = {};
+          try {
+            result = await response.json();
+          } catch (_) {
+            result = {};
+          }
+
+          if (!response.ok || result.ok === false) {
+            throw new Error(result.error || 'Unable to save your RSVP. Please try again.');
+          }
+
+          form.reset();
+          syncGuestUI();
+          showStatus('success', 'Thank you! Your RSVP has been received. · Cảm ơn bạn đã xác nhận.');
+        } catch (err) {
+          showStatus('error', err.message || 'Something went wrong. Please try again.');
+          submitBtn.disabled = false;
+          submitting = false;
+          submitBtn.textContent = 'Submit RSVP · Gửi xác nhận';
+          return;
+        }
+
+        submitBtn.textContent = 'Submitted · Đã gửi';
+      }
+
+      form?.addEventListener('change', syncGuestUI);
+      form?.addEventListener('submit', handleSubmit);
+      syncGuestUI();
+    })();
+  </script>
+
+</body>
+</html>

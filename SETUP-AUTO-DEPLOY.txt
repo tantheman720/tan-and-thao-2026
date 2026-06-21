@@ -1,0 +1,45 @@
+GitHub + Cloudflare auto-deploy
+==============================
+
+Live site: https://tan-and-thao-2026.pages.dev
+
+ONE-TIME SETUP
+--------------
+
+1. GitHub token
+   - https://github.com/settings/tokens → Generate new token (classic)
+   - Scope: repo
+   - Copy the token (ghp_...)
+
+2. Create .env in this folder (copy from .env.example):
+   GITHUB_USERNAME=your-github-username
+   GITHUB_TOKEN=ghp_your_token_here
+   GITHUB_REPO=tan-and-thao-2026
+
+3. Push to GitHub (Terminal):
+   chmod +x scripts/setup-auto-deploy.sh scripts/push-live.sh
+   ./scripts/setup-auto-deploy.sh
+
+4. Connect Cloudflare to GitHub
+   - https://dash.cloudflare.com → Workers & Pages → tan-and-thao-2026
+   - Settings → Builds & deployments → Connect to Git
+   - Select repo: tan-and-thao-2026
+   - Build command: (empty)
+   - Build output directory: /
+   - Production branch: main
+   - Save
+
+   If "Connect to Git" isn't available on your project, create a new Pages
+   project linked to GitHub with the same settings, then use its URL.
+
+DAY-TO-DAY (edit in Cursor → go live)
+--------------------------------------
+
+1. Edit files in Cursor (index.html, photos, rsvp-config.js, etc.)
+2. Terminal:
+   ./scripts/push-live.sh "Describe your change"
+3. Wait ~1–2 min → refresh https://tan-and-thao-2026.pages.dev
+
+OPTIONAL: install Git for simpler pushes
+   xcode-select --install
+   Then use: git add . && git commit -m "..." && git push

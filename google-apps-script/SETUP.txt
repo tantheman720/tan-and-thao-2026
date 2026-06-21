@@ -1,0 +1,23 @@
+Google Sheet + Apps Script setup
+================================
+
+1. Create a new Google Sheet (e.g. "Tan & Thao Wedding RSVPs").
+
+2. Extensions → Apps Script. Create two script files:
+   - Paste Code.gs from this folder
+   - Paste setup-sheet.gs from this folder
+
+3. Run initializeSpreadsheet once (Run → initializeSpreadsheet).
+   Approve permissions when prompted. This creates RSVPs, Guests, and Tables tabs.
+
+4. Deploy → New deployment → Type: Web app
+   - Execute as: Me
+   - Who has access: Anyone
+   Copy the Web app URL.
+
+5. In the repo, open rsvp-config.js and set:
+   RSVP_SCRIPT_URL: 'https://script.google.com/macros/s/....../exec'
+
+6. Redeploy the site (Cloudflare Pages picks up the change from GitHub).
+
+Test: open the live site → RSVP section → submit a test row → check the RSVPs tab.

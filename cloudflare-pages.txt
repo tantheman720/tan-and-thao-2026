@@ -1,0 +1,9 @@
+# Cloudflare Pages — Git auto-deploy
+# Live URL: https://tan-and-thao-2026.pages.dev
+# Repo: tan-and-thao-2026 (GitHub)
+#
+# Build command: (empty)
+# Build output directory: /
+# Production branch: main
+#
+# Connect: Workers & Pages → tan-and-thao-2026 → Settings → Connect to Git

@@ -1,0 +1,12 @@
+{
+  "name": "tan-and-thao-2026",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "push": "node scripts/push-to-github.mjs",
+    "deploy": "node scripts/push-to-github.mjs"
+  },
+  "dependencies": {
+    "isomorphic-git": "^1.30.1"
+  }
+}

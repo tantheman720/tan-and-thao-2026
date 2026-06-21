@@ -7,7 +7,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,300;1,400&family=Inter:wght@300;400;500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,300;1,400&family=Dancing+Script:wght@400;500;600;700&family=Inter:wght@300;400;500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
   <link href="https://fonts.cdnfonts.com/css/general-sans" rel="stylesheet">
 
   <script src="https://cdn.tailwindcss.com"></script>
@@ -173,6 +173,33 @@
     }
 
     .nav-blur { background: rgba(14, 14, 17, 0.82); backdrop-filter: blur(8px); }
+    .nav-mark {
+      display: inline-flex;
+      align-items: baseline;
+      font-size: 1.375rem;
+      letter-spacing: 0.02em;
+      color: #F4F3F0;
+      text-decoration: none;
+      line-height: 1;
+    }
+    .nav-mark:hover { color: #fff; }
+    @media (min-width: 768px) {
+      .nav-mark { font-size: 1.625rem; }
+    }
+    .nav-mark-letter {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-weight: 300;
+    }
+    .nav-mark-and {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-style: normal;
+      font-weight: 300;
+      font-size: 0.72em;
+      margin-inline: 0.08em;
+      line-height: 1;
+      opacity: 0.85;
+    }
 
     body[data-hero="b"] .hero--full { display: none; }
     body[data-hero="a"] .hero--split { display: none; }
@@ -203,13 +230,24 @@
       position: absolute;
       inset-inline: 0;
       top: 0;
-      height: 11rem;
+      height: 52%;
+      min-height: 14rem;
       z-index: 1;
       pointer-events: none;
-      background: linear-gradient(to bottom, #0E0E11 0%, rgba(14,14,17,0.88) 35%, transparent 100%);
+      background: linear-gradient(
+        to bottom,
+        #0E0E11 0%,
+        rgba(14, 14, 17, 0.92) 18%,
+        rgba(14, 14, 17, 0.55) 42%,
+        rgba(14, 14, 17, 0.15) 68%,
+        transparent 100%
+      );
     }
     @media (min-width: 768px) {
-      .hero-scrim-top { height: 13rem; }
+      .hero-scrim-top {
+        height: 48%;
+        min-height: 16rem;
+      }
     }
     .hero-scrim-bottom {
       position: absolute;
@@ -243,88 +281,106 @@
       z-index: 10;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
+      justify-content: center;
+      align-items: center;
       pointer-events: none;
     }
     .hero-copy-inner {
       width: 100%;
       max-width: 72rem;
       margin-inline: auto;
-      min-height: min(52vh, 460px);
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
-      padding: 24px 1.25rem 24px;
+      justify-content: center;
+      padding: 24px 1.25rem;
       text-align: center;
       pointer-events: auto;
-      transform: translateY(calc(-6vh + 64px));
     }
     @media (min-width: 768px) {
       .hero-copy-inner {
-        min-height: min(50vh, 500px);
-        padding: 32px 3rem 40px;
-        transform: translateY(calc(-8vh + 64px));
+        padding: 32px 3rem;
+      }
+    }
+    .hero--full .hero-copy-inner {
+      transform: translateY(-10vh);
+    }
+    @media (max-width: 767px) {
+      .hero--full .hero-copy-inner {
+        transform: translateY(-6vh);
       }
     }
     .hero-title {
-      font-family: 'General Sans', 'Inter', system-ui, sans-serif;
-      font-weight: 300;
       letter-spacing: 0.02em;
-      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
       line-height: 1;
+    }
+    @media (min-width: 768px) {
+      .hero-title {
+        margin-bottom: 2.5rem;
+      }
     }
     .hero-title .hero-name {
-      font-size: clamp(3.25rem, 9vw, 5.25rem);
+      font-family: 'Dancing Script', cursive;
+      font-style: normal;
+      font-weight: 400;
+      font-size: clamp(4rem, 11vw, 6.5rem);
       line-height: 1;
-      font-weight: 300;
+      text-shadow:
+        0 0 40px rgba(0, 0, 0, 0.78),
+        0 0 80px rgba(0, 0, 0, 0.58),
+        0 0 120px rgba(0, 0, 0, 0.38),
+        0 2px 12px rgba(0, 0, 0, 0.65);
     }
     .hero-title .hero-and {
-      font-family: 'General Sans', 'Inter', system-ui, sans-serif;
-      font-size: clamp(1.35rem, 3.5vw, 2.25rem);
-      font-weight: 300;
+      font-family: 'Dancing Script', cursive;
       font-style: normal;
-      opacity: 0.75;
+      font-weight: 400;
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      color: #F4F3F0;
       margin-inline: 0.45em;
+      text-shadow:
+        0 0 36px rgba(0, 0, 0, 0.74),
+        0 0 72px rgba(0, 0, 0, 0.54),
+        0 0 108px rgba(0, 0, 0, 0.36),
+        0 1px 10px rgba(0, 0, 0, 0.6);
     }
-    .hero--full .hero-date,
-    .hero--full .hero-time,
-    .hero--full .hero-venue-name,
-    .hero--full .hero-venue-place {
+    .hero-details {
+      margin-bottom: 2.25rem;
+    }
+    @media (min-width: 768px) {
+      .hero-details {
+        margin-bottom: 2.75rem;
+      }
+    }
+    .hero-detail-line {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: clamp(0.9375rem, 2.8vw, 1rem);
+      letter-spacing: 0.06em;
+      color: rgba(244, 243, 240, 0.88);
       text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
     }
-    .hero-date {
-      font-family: 'Inter', system-ui, sans-serif;
-      font-size: 1rem;
-      letter-spacing: 0.06em;
-      color: rgba(244, 243, 240, 0.92);
-      margin-bottom: 0.25rem;
+    .hero-details-divider {
+      width: 2.75rem;
+      height: 1px;
+      margin: 0.875rem auto;
+      background: rgba(244, 243, 240, 0.28);
     }
-    .hero-time {
-      font-family: 'Inter', system-ui, sans-serif;
-      font-size: 0.875rem;
-      letter-spacing: 0.08em;
-      color: rgba(244, 243, 240, 0.72);
-      margin-bottom: 1.125rem;
-    }
-    .hero-venue-name {
-      font-family: 'Inter', system-ui, sans-serif;
-      font-size: 0.8125rem;
-      letter-spacing: 0.08em;
-      color: rgba(244, 243, 240, 0.78);
-      margin-bottom: 0.25rem;
-    }
-    .hero-venue-place {
-      font-family: 'Inter', system-ui, sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.06em;
-      color: rgba(244, 243, 240, 0.55);
-      margin-bottom: 1.75rem;
+    @media (min-width: 768px) {
+      .hero-details-divider {
+        width: 3.25rem;
+        margin: 1rem auto;
+      }
     }
     .hero-actions {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
+      margin-top: 0.5rem;
+    }
+    @media (min-width: 768px) {
+      .hero-actions {
+        margin-top: 0.75rem;
+      }
     }
     .hero--full .hero-actions {
       justify-content: center;
@@ -339,7 +395,7 @@
       font-family: 'Inter', system-ui, sans-serif;
       font-size: 13px;
       letter-spacing: 0.08em;
-      font-weight: 400;
+      font-weight: 600;
       text-decoration: none;
       transition: all 180ms ease;
     }
@@ -452,7 +508,7 @@
   <!-- Sticky Navigation -->
   <nav class="fixed top-0 inset-x-0 z-50 nav-blur border-b border-edge">
     <div class="max-w-6xl mx-auto px-5 md:px-12 h-16 flex items-center justify-between">
-      <a href="#top" class="font-display text-xl md:text-2xl tracking-wide text-primary font-normal">T <span class="text-secondary">&amp;</span> T</a>
+      <a href="#top" class="nav-mark"><span class="nav-mark-letter">T</span><span class="nav-mark-and">&amp;</span><span class="nav-mark-letter">T</span></a>
       <div class="flex items-center gap-5 md:gap-8 font-sans text-sm tracking-[0.08em]">
         <a href="#quick-details" class="text-secondary hover:text-primary transition-colors duration-150">Details</a>
         <a href="#story" class="text-secondary hover:text-primary transition-colors duration-150 hidden sm:inline">Our Story</a>
@@ -484,10 +540,11 @@
             <span class="hero-name">Thao</span>
           </span>
         </h1>
-        <p class="hero-date">August 7, 2026</p>
-        <p class="hero-time">5:00 PM</p>
-        <p class="hero-venue-name">LaCasa</p>
-        <p class="hero-venue-place">District 2, Ho Chi Minh City</p>
+        <div class="hero-details">
+        <p class="hero-detail-line">August 7, 2026 - 5PM</p>
+        <div class="hero-details-divider" aria-hidden="true"></div>
+        <p class="hero-detail-line">LaCasa - District 2, Ho Chi Minh City</p>
+        </div>
         <div class="hero-actions">
           <a href="#rsvp" class="hero-button primary">RSVP</a>
           <a href="#quick-details" class="hero-button secondary">View Invitation</a>
@@ -509,10 +566,11 @@
               <span class="hero-name">Thao</span>
             </span>
           </h1>
-          <p class="hero-date">August 7, 2026</p>
-          <p class="hero-time">5:00 PM</p>
-          <p class="hero-venue-name">LaCasa</p>
-          <p class="hero-venue-place">District 2, Ho Chi Minh City</p>
+          <div class="hero-details">
+          <p class="hero-detail-line">August 7, 2026 - 5PM</p>
+          <div class="hero-details-divider" aria-hidden="true"></div>
+          <p class="hero-detail-line">LaCasa - District 2, Ho Chi Minh City</p>
+          </div>
           <div class="hero-actions">
             <a href="#rsvp" class="hero-button primary">RSVP</a>
             <a href="#quick-details" class="hero-button secondary">View Invitation</a>
@@ -625,12 +683,12 @@
         <p class="font-sans text-sm tracking-[0.12em] text-secondary mb-8 text-center">Timeline · Chương trình</p>
         <div class="grid sm:grid-cols-3 gap-10 sm:gap-8 text-center">
           <div>
-            <p class="font-display text-4xl text-primary font-light">17:00</p>
+            <p class="font-display text-4xl text-primary font-light">5:00 PM</p>
             <p class="font-sans text-base tracking-wide text-primary mt-2">Vows</p>
             <p class="font-serif text-lg italic text-secondary">Lễ Nguyện Ước</p>
           </div>
           <div>
-            <p class="font-display text-4xl text-primary font-light">18:00</p>
+            <p class="font-display text-4xl text-primary font-light">6:00 PM</p>
             <p class="font-sans text-base tracking-wide text-primary mt-2">Dinner</p>
             <p class="font-serif text-lg italic text-secondary">Khai Tiệc</p>
           </div>

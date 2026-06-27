@@ -47,6 +47,56 @@
     .font-serif { font-family: 'Cormorant Garamond', Georgia, serif; }
     .font-sans { font-family: 'Inter', system-ui, sans-serif; }
 
+    /* Scroll reveal + hero load animations */
+    @media (prefers-reduced-motion: no-preference) {
+      [data-reveal] {
+        opacity: 0;
+        transform: translateY(14px);
+        transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      [data-reveal].is-visible {
+        opacity: 1;
+        transform: none;
+      }
+      [data-reveal-delay="1"] { transition-delay: 0.1s; }
+      [data-reveal-delay="2"] { transition-delay: 0.2s; }
+      [data-reveal-delay="3"] { transition-delay: 0.3s; }
+      [data-reveal-delay="4"] { transition-delay: 0.4s; }
+
+      .hero-intro > * {
+        opacity: 0;
+        transform: translateY(14px);
+        transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .hero-intro.is-loaded > * {
+        opacity: 1;
+        transform: none;
+      }
+      .hero-intro.is-loaded > *:nth-child(1) { transition-delay: 0.05s; }
+      .hero-intro.is-loaded > *:nth-child(2) { transition-delay: 0.13s; }
+      .hero-intro.is-loaded > *:nth-child(3) { transition-delay: 0.21s; }
+      .hero-intro.is-loaded > *:nth-child(4) { transition-delay: 0.29s; }
+
+      @keyframes dotPulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.08); }
+        100% { transform: scale(1); }
+      }
+      .attend-radio:checked + .attend-card .attend-dot {
+        animation: dotPulse 0.35s ease;
+      }
+      .condensed-hero__map:hover .condensed-hero__pin {
+        transform: translateY(-2px) scale(1.08);
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      [data-reveal],
+      .hero-intro > * {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
     /* Photo that feathers into the background, softest at the corners */
     .photo {
       position: relative;
@@ -61,16 +111,26 @@
       pointer-events: none;
     }
 
+    /* RSVP form contrast tokens */
+    #rsvp-form {
+      --rsvp-muted: #B8B8BD;
+      --rsvp-border: #484852;
+      --rsvp-field-bg: #232329;
+      --rsvp-icon: #94949C;
+      border-color: var(--rsvp-border);
+    }
+    .rsvp-hint { color: var(--rsvp-muted); }
+
     /* Attendance radio cards */
     .attend-radio { position: absolute; opacity: 0; width: 0; height: 0; }
     .attend-card {
       display: flex; align-items: flex-start; gap: 0.55rem;
       height: 100%;
       cursor: pointer;
-      border: 1px solid #33333A;
+      border: 1px solid var(--rsvp-border, #484852);
       border-radius: 4px;
       padding: 1rem 1rem;
-      background: #212125;
+      background: #25252B;
       transition: border-color 0.15s ease, background-color 0.15s ease;
     }
     .attend-radio:checked + .attend-card {
@@ -86,10 +146,10 @@
       flex: none;
       width: 16px; height: 16px;
       margin-top: 3px;
-      border: 1px solid #5A5A62;
+      border: 1px solid #72727C;
       border-radius: 9999px;
       position: relative;
-      transition: border-color 0.15s ease;
+      transition: border-color 0.15s ease, transform 0.2s ease;
     }
     .attend-radio:checked + .attend-card .attend-dot { border-color: #F4F3F0; }
     .attend-radio:checked + .attend-card .attend-dot::after {
@@ -97,30 +157,40 @@
       background: #F4F3F0; border-radius: 9999px;
     }
     /* Check / X icon */
-    .attend-icon { flex: none; margin-top: 2px; margin-left: 0.4rem; color: #7C7C84; transition: color 0.15s ease; }
-    .attend-radio:checked + .attend-card .attend-icon { color: #F4F3F0; }
+    .attend-icon {
+      flex: none;
+      margin-top: 2px;
+      margin-left: 0.4rem;
+      color: var(--rsvp-icon, #94949C);
+      transform: scale(0.92);
+      transition: color 0.15s ease, transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.15s ease;
+    }
+    .attend-icon path { opacity: 0.75; transition: opacity 0.15s ease; }
+    .attend-radio:checked + .attend-card .attend-icon {
+      color: #F4F3F0;
+      transform: scale(1);
+    }
+    .attend-radio:checked + .attend-card .attend-icon path { opacity: 1; }
 
     .rsvp-input {
       width: 100%;
-      background: #18181C;
-      border: 1px solid #2E2E34;
+      background: var(--rsvp-field-bg, #232329);
+      border: 1px solid var(--rsvp-border, #484852);
       border-radius: 4px;
       padding: 0.75rem 1rem;
       font-size: 1rem;
       color: #F4F3F0;
       transition: border-color 0.15s ease, background-color 0.15s ease;
     }
-    .rsvp-input::placeholder { color: rgba(164, 164, 168, 0.5); }
+    .rsvp-input::placeholder { color: rgba(184, 184, 189, 0.55); }
     .rsvp-input:focus {
       outline: none;
-      border-color: #5A5A62;
-      background: #1C1C20;
+      border-color: #6A6A74;
+      background: #28282E;
     }
     .rsvp-input--optional {
       font-size: 0.9375rem;
       padding: 0.625rem 0.875rem;
-      background: #16161A;
-      border-color: #28282E;
     }
     .rsvp-submit {
       width: 100%;
@@ -173,6 +243,239 @@
     }
 
     .nav-blur { background: rgba(14, 14, 17, 0.82); backdrop-filter: blur(8px); }
+
+    /* Site variant toggle + layout */
+    body[data-site="full"] .site-condensed-only { display: none !important; }
+    body[data-site="condensed"] .site-full-only { display: none !important; }
+    body[data-site="condensed"] .nav-full-only { display: none !important; }
+    body[data-site="full"] .nav-mark-condensed { display: none !important; }
+    body[data-site="condensed"] .nav-mark-full { display: none !important; }
+
+    .prototype-bar {
+      position: fixed;
+      top: 0;
+      inset-inline: 0;
+      z-index: 60;
+      height: 2.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+      background: #1a1a1f;
+      border-bottom: 1px solid #33333A;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 0.6875rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .prototype-bar__btn {
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #A4A4A8;
+      cursor: pointer;
+      transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+    }
+    .prototype-bar__btn:hover { color: #F4F3F0; }
+    .prototype-bar__btn.is-active {
+      background: rgba(244, 243, 240, 0.12);
+      border-color: rgba(244, 243, 240, 0.25);
+      color: #F4F3F0;
+    }
+    .site-nav {
+      top: 2.25rem;
+    }
+    body[data-site="condensed"] #rsvp {
+      padding-top: 2.5rem;
+      padding-bottom: 3rem;
+      border-top: none;
+    }
+    @media (min-width: 768px) {
+      body[data-site="condensed"] #rsvp {
+        padding-top: 3rem;
+        padding-bottom: 3.5rem;
+      }
+    }
+    body[data-site="condensed"] .rsvp-header-condensed {
+      display: block;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    body[data-site="condensed"] .rsvp-header-full { display: none; }
+    body[data-site="full"] .rsvp-header-condensed { display: none; }
+    body[data-site="condensed"] .rsvp-header-condensed h2 {
+      font-family: 'Jost', system-ui, sans-serif;
+      font-size: 1.75rem;
+      font-weight: 300;
+      letter-spacing: 0.04em;
+    }
+    body[data-site="condensed"] #rsvp-form {
+      padding: 2rem 1.75rem 2.25rem;
+    }
+    @media (min-width: 768px) {
+      body[data-site="condensed"] #rsvp-form {
+        padding: 2.5rem 2.5rem 2.75rem;
+      }
+    }
+    .condensed-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      padding: 5.5rem 1.5rem 3.5rem;
+      text-align: center;
+      max-width: 36rem;
+      margin-inline: auto;
+    }
+    @media (min-width: 768px) {
+      .condensed-hero {
+        gap: 2.5rem;
+        padding: 6rem 1.5rem 4rem;
+      }
+    }
+    .condensed-hero__block {
+      width: 100%;
+    }
+    .condensed-hero .hero-eyebrow {
+      margin-bottom: 0.5rem;
+    }
+    .condensed-hero__title {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(2.75rem, 8vw, 4rem);
+      line-height: 1.1;
+      margin-bottom: 0.35rem;
+      text-shadow:
+        0 0 32px rgba(0, 0, 0, 0.65),
+        0 0 64px rgba(0, 0, 0, 0.4);
+    }
+    .condensed-hero__legal-names {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 0.8125rem;
+      letter-spacing: 0.04em;
+      color: #A4A4A8;
+      margin-bottom: 0;
+    }
+    .condensed-hero__line {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 0.9375rem;
+      letter-spacing: 0.06em;
+      color: rgba(244, 243, 240, 0.88);
+      margin-bottom: 0.2rem;
+    }
+    .condensed-hero__map {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-top: 0.65rem;
+      font-size: 0.875rem;
+      color: #F4F3F0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+      text-decoration: none;
+    }
+    .condensed-hero__map:hover { border-bottom-color: #fff; }
+    .condensed-hero__pin {
+      flex: none;
+      width: 14px;
+      height: 14px;
+      color: #F4F3F0;
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .condensed-hero__deadline {
+      margin-top: 0;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.04em;
+      color: #A4A4A8;
+    }
+    .condensed-extras-wrap {
+      max-width: 36rem;
+      margin: 0 auto;
+      padding: 0 1.5rem 3rem;
+    }
+    .condensed-event-details summary {
+      cursor: pointer;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 0.8125rem;
+      letter-spacing: 0.08em;
+      color: #A4A4A8;
+      list-style: none;
+      text-align: center;
+      padding: 0.75rem 0;
+    }
+    .condensed-event-details summary::-webkit-details-marker { display: none; }
+    .condensed-extras__body {
+      font-size: 0.875rem;
+      color: rgba(244, 243, 240, 0.85);
+      line-height: 1.6;
+      text-align: center;
+      padding-bottom: 1rem;
+    }
+    .condensed-extras__body a {
+      color: #F4F3F0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+      text-decoration: none;
+    }
+    .site-footer__signature {
+      font-family: 'Dancing Script', cursive;
+      font-weight: 400;
+      font-size: clamp(2.5rem, 7vw, 3.25rem);
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+      color: #F4F3F0;
+    }
+    .site-footer__signature .site-footer__and {
+      font-size: 0.55em;
+      margin-inline: 0.35em;
+    }
+    .condensed-footer {
+      padding: 2rem 1.5rem 2.5rem;
+      text-align: center;
+      border-top: 1px solid #33333A;
+    }
+    .rsvp-optional-details {
+      border-top: 1px solid var(--rsvp-border, #484852);
+      margin-top: 0.5rem;
+      padding-top: 0;
+    }
+    #rsvp-form .rsvp-optional-inner {
+      padding-top: 1.5rem;
+    }
+    body[data-site="full"] .rsvp-optional-details::before {
+      content: 'Optional';
+      display: block;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 0.8125rem;
+      letter-spacing: 0.08em;
+      color: #B8B8BD;
+      text-align: center;
+      padding: 0.25rem 0 0.75rem;
+    }
+    body[data-site="full"] .rsvp-optional-details > summary { display: none; }
+    body[data-site="full"] .rsvp-optional-details[open] .rsvp-optional-inner,
+    body[data-site="full"] .rsvp-optional-details .rsvp-optional-inner {
+      display: block;
+      padding-top: 0;
+    }
+    body[data-site="condensed"] .rsvp-optional-details > summary {
+      display: block;
+      cursor: pointer;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 0.8125rem;
+      letter-spacing: 0.08em;
+      color: #B8B8BD;
+      text-align: center;
+      padding: 1rem 0;
+      list-style: none;
+    }
+    body[data-site="condensed"] .rsvp-optional-details > summary::-webkit-details-marker { display: none; }
+    body[data-site="condensed"] .rsvp-optional-details:not([open]) .rsvp-optional-inner { display: none; }
+    body[data-site="condensed"] .rsvp-optional-details[open] > summary {
+      padding-bottom: 0.25rem;
+    }
+    body[data-site="condensed"] .rsvp-optional-details[open] .rsvp-optional-inner {
+      padding-top: 0.75rem;
+    }
     .nav-mark {
       display: inline-flex;
       align-items: baseline;
@@ -187,14 +490,14 @@
       .nav-mark { font-size: 1.625rem; }
     }
     .nav-mark-letter {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-style: italic;
-      font-weight: 300;
+      font-family: 'Dancing Script', cursive;
+      font-style: normal;
+      font-weight: 400;
     }
     .nav-mark-and {
-      font-family: 'Inter', system-ui, sans-serif;
+      font-family: 'Dancing Script', cursive;
       font-style: normal;
-      font-weight: 300;
+      font-weight: 400;
       font-size: 0.72em;
       margin-inline: 0.08em;
       line-height: 1;
@@ -301,22 +604,27 @@
         padding: 32px 3rem;
       }
     }
-    .hero--full .hero-copy-inner {
-      transform: translateY(-10vh);
+    .hero-eyebrow {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: clamp(0.8125rem, 2.2vw, 0.875rem);
+      letter-spacing: 0.08em;
+      color: rgba(244, 243, 240, 0.82);
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+      margin-bottom: 0.65rem;
     }
-    @media (max-width: 767px) {
-      .hero--full .hero-copy-inner {
-        transform: translateY(-6vh);
+    @media (min-width: 768px) {
+      .hero-eyebrow {
+        margin-bottom: 0.75rem;
       }
     }
     .hero-title {
       letter-spacing: 0.02em;
-      margin-bottom: 2rem;
+      margin-bottom: 1.25rem;
       line-height: 1;
     }
     @media (min-width: 768px) {
       .hero-title {
-        margin-bottom: 2.5rem;
+        margin-bottom: 1.5rem;
       }
     }
     .hero-title .hero-name {
@@ -345,11 +653,11 @@
         0 1px 10px rgba(0, 0, 0, 0.6);
     }
     .hero-details {
-      margin-bottom: 2.25rem;
+      margin-bottom: 1.35rem;
     }
     @media (min-width: 768px) {
       .hero-details {
-        margin-bottom: 2.75rem;
+        margin-bottom: 1.65rem;
       }
     }
     .hero-detail-line {
@@ -362,24 +670,24 @@
     .hero-details-divider {
       width: 2.75rem;
       height: 1px;
-      margin: 0.875rem auto;
+      margin: 0.5rem auto;
       background: rgba(244, 243, 240, 0.28);
     }
     @media (min-width: 768px) {
       .hero-details-divider {
         width: 3.25rem;
-        margin: 1rem auto;
+        margin: 0.625rem auto;
       }
     }
     .hero-actions {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
-      margin-top: 0.5rem;
+      margin-top: 0.25rem;
     }
     @media (min-width: 768px) {
       .hero-actions {
-        margin-top: 0.75rem;
+        margin-top: 0.35rem;
       }
     }
     .hero--full .hero-actions {
@@ -397,7 +705,7 @@
       letter-spacing: 0.08em;
       font-weight: 600;
       text-decoration: none;
-      transition: all 180ms ease;
+      transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
     }
     .hero--split .hero-button {
       flex: none;
@@ -497,28 +805,30 @@
   </style>
 </head>
 
-<body class="text-primary antialiased font-sans" data-hero="a">
+<body class="text-primary antialiased font-sans" data-site="full" data-hero="a">
   <script>
     (function () {
-      var hero = new URLSearchParams(location.search).get('hero');
+      var params = new URLSearchParams(location.search);
+      var hero = params.get('hero');
       document.body.dataset.hero = hero === 'b' ? 'b' : 'a';
+
+      var siteParam = params.get('site');
+      var stored = localStorage.getItem('wedding-site-variant');
+      var site = siteParam === 'condensed' || siteParam === 'full'
+        ? siteParam
+        : (stored === 'condensed' ? 'condensed' : 'full');
+      document.body.dataset.site = site;
     })();
   </script>
 
-  <!-- Sticky Navigation -->
-  <nav class="fixed top-0 inset-x-0 z-50 nav-blur border-b border-edge">
-    <div class="max-w-6xl mx-auto px-5 md:px-12 h-16 flex items-center justify-between">
-      <a href="#top" class="nav-mark"><span class="nav-mark-letter">T</span><span class="nav-mark-and">&amp;</span><span class="nav-mark-letter">T</span></a>
-      <div class="flex items-center gap-5 md:gap-8 font-sans text-sm tracking-[0.08em]">
-        <a href="#quick-details" class="text-secondary hover:text-primary transition-colors duration-150">Details</a>
-        <a href="#story" class="text-secondary hover:text-primary transition-colors duration-150 hidden sm:inline">Our Story</a>
-        <a href="#rsvp" class="text-[#0E0E11] bg-white hover:bg-white/85 transition-colors duration-150 px-4 py-2 rounded-sm font-medium">RSVP</a>
-      </div>
-    </div>
-  </nav>
+  <!-- Prototype toggle (remove bar before launch; lock data-site in script above) -->
+  <div class="prototype-bar" role="toolbar" aria-label="Site navigation">
+    <button type="button" class="prototype-bar__btn is-active" data-site-toggle="full">Invitation</button>
+    <button type="button" class="prototype-bar__btn" data-site-toggle="condensed">RSVP</button>
+  </div>
 
-  <!-- Hero -->
-  <div id="top">
+  <!-- Hero (Version A — full site) -->
+  <div id="top" class="site-full-only">
 
     <!-- Variant A: full-image cinematic (default) -->
     <section class="hero hero--full relative h-screen min-h-screen overflow-hidden" aria-label="Wedding invitation">
@@ -532,11 +842,12 @@
       <div class="hero-scrim-side" aria-hidden="true"></div>
 
       <div class="hero-copy">
-        <div class="hero-copy-inner">
+        <div class="hero-copy-inner hero-intro">
+        <p class="hero-eyebrow">Together with our families</p>
         <h1 class="hero-title">
           <span class="flex items-baseline justify-center flex-wrap">
             <span class="hero-name">Tan</span>
-            <span class="hero-and">and</span>
+            <span class="hero-and">&amp;</span>
             <span class="hero-name">Thao</span>
           </span>
         </h1>
@@ -559,10 +870,11 @@
 
       <div class="hero-split">
         <div class="hero-split-copy">
+          <p class="hero-eyebrow">Together with our families</p>
           <h1 class="hero-title">
             <span class="flex items-baseline flex-wrap">
               <span class="hero-name">Tan</span>
-              <span class="hero-and">and</span>
+              <span class="hero-and">&amp;</span>
               <span class="hero-name">Thao</span>
             </span>
           </h1>
@@ -585,21 +897,44 @@
 
   </div>
 
+  <!-- Version B — condensed header -->
+  <section id="top-condensed" class="site-condensed-only condensed-hero" aria-label="Wedding invitation">
+    <div class="condensed-hero__block condensed-hero__block--intro" data-reveal data-reveal-delay="1">
+      <p class="hero-eyebrow">Together with our families</p>
+      <h1 class="condensed-hero__title">Tan &amp; Thao</h1>
+      <p class="condensed-hero__legal-names">Định Duy Tân · Phạm Thị Phương Thảo</p>
+    </div>
+
+    <div class="condensed-hero__block condensed-hero__block--event" data-reveal data-reveal-delay="2">
+      <p class="condensed-hero__line">August 7, 2026 - 5PM</p>
+      <p class="condensed-hero__line">LaCasa - District 2, Ho Chi Minh City</p>
+      <a href="https://share.google/FCYQBPn6TT4AVnYfr" target="_blank" rel="noopener noreferrer" class="condensed-hero__map">
+        <svg class="condensed-hero__pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        View map
+      </a>
+    </div>
+
+    <p class="condensed-hero__deadline" data-reveal data-reveal-delay="3">Kindly respond by August 1.</p>
+  </section>
+
   <!-- Quick Details Strip -->
-  <section id="quick-details" class="bg-soft border-y border-edge py-16 md:py-20">
+  <section id="quick-details" class="site-full-only bg-soft border-y border-edge py-16 md:py-20">
     <div class="max-w-5xl mx-auto px-6 md:px-12">
       <div class="grid sm:grid-cols-3 gap-12 sm:gap-8 text-center sm:text-left divide-y sm:divide-y-0 sm:divide-x divide-edge">
 
-        <div class="pt-8 sm:pt-0 sm:pr-8">
+        <div class="pt-8 sm:pt-0 sm:pr-8" data-reveal data-reveal-delay="1">
           <p class="font-sans text-sm tracking-[0.12em] text-secondary mb-4">When</p>
           <p class="font-display text-3xl md:text-4xl text-primary font-light leading-tight">August 7, 2026</p>
           <p class="font-sans text-base text-secondary mt-2 leading-relaxed">
-            5:00 PM Vows · 6:00 PM Dinner<br>
-            <span class="text-sm text-secondary/70">Lễ Thành Hôn · Tiệc Tối</span>
+            5:00 PM Ceremony · 6:00 PM Dinner<br>
+            <span class="text-sm text-secondary/70">Lễ Thành Hôn · Khai Tiệc</span>
           </p>
         </div>
 
-        <div class="pt-8 sm:pt-0 sm:px-8">
+        <div class="pt-8 sm:pt-0 sm:px-8" data-reveal data-reveal-delay="2">
           <p class="font-sans text-sm tracking-[0.12em] text-secondary mb-4">Where</p>
           <p class="font-display text-3xl md:text-4xl text-primary font-light leading-tight">Lacasa</p>
           <p class="font-sans text-base text-secondary mt-2 leading-relaxed">
@@ -608,7 +943,7 @@
           </p>
         </div>
 
-        <div class="pt-8 sm:pt-0 sm:pl-8">
+        <div class="pt-8 sm:pt-0 sm:pl-8" data-reveal data-reveal-delay="3">
           <p class="font-sans text-sm tracking-[0.12em] text-secondary mb-4">How</p>
           <p class="font-display text-3xl md:text-4xl text-primary font-light leading-tight">RSVP</p>
           <p class="font-sans text-base text-secondary mt-2 leading-relaxed">
@@ -622,15 +957,15 @@
   </section>
 
   <!-- Story Section -->
-  <section id="story" class="py-24 md:py-32">
+  <section id="story" class="site-full-only py-24 md:py-32">
     <div class="max-w-6xl mx-auto px-6 md:px-12">
       <div class="grid md:grid-cols-[0.85fr_1.15fr] gap-12 md:gap-16 items-center">
 
-        <div class="photo aspect-[3/4] mx-auto w-full max-w-sm">
+        <div class="photo aspect-[3/4] mx-auto w-full max-w-sm" data-reveal>
           <img src="Da Lat Pre-shoots/Portrait - face smiling front main.JPG" alt="Tan and Thao in Da Lat">
         </div>
 
-        <div class="text-center md:text-left">
+        <div class="text-center md:text-left" data-reveal data-reveal-delay="1">
           <h2 class="font-display text-3xl md:text-4xl font-light leading-tight mb-4 text-balance">
             Celebrating with the people who brought us here
           </h2>
@@ -640,10 +975,10 @@
 
           <div class="space-y-1.5">
             <p class="font-sans text-base md:text-lg text-primary/90 leading-relaxed">
-              Our story is a collection of everyone who has been through it with us. We just wanted to take a moment to pause, gather the people we love in one place, and appreciate the journey. Let's celebrate where we've been, where we're going, and the simple joy of being together. See everyone in Saigon!
+              Life has taken us through different cities, countries, friendships, and chapters. This wedding is our chance to bring everyone together, catch up, share a few drinks, and celebrate with the people who mean the most to us. We're so happy you'll be part of it.
             </p>
             <p class="font-serif text-base md:text-lg text-secondary italic leading-relaxed">
-              Hành trình của chúng tôi được dệt nên từ bóng dáng của tất cả những ai đã từng đi qua nó. Chúng tôi chỉ muốn dành một khoảng lặng để cùng ngồi lại, gom những người mình thương về một nơi, và cùng nhìn lại chặng đường đã qua. Hãy cùng gói ghém lại quá khứ, mở ra tương lai, và tận hưởng trọn vẹn niềm vui giản dị khi được ở bên nhau. Hẹn gặp mọi người ở Sài Gòn nhé.
+              Cuộc sống đã đưa chúng tôi đi qua nhiều nơi, gặp gỡ nhiều người và trải qua nhiều chặng đường khác nhau. Đám cưới này là dịp để mọi người cùng gặp nhau, cùng ăn uống, trò chuyện và tận hưởng một buổi tối thật vui vẻ bên những người thân yêu. Chúng tôi rất vui vì có mọi người ở đây cùng chung vui.
             </p>
           </div>
         </div>
@@ -653,12 +988,12 @@
   </section>
 
   <!-- Venue Section -->
-  <section id="venue" class="bg-soft border-y border-edge py-24 md:py-32">
+  <section id="venue" class="site-full-only bg-soft border-y border-edge py-24 md:py-32">
     <div class="max-w-5xl mx-auto px-6 md:px-12">
 
       <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-center mb-16 md:mb-20">
 
-        <div class="text-center md:text-left">
+        <div class="text-center md:text-left" data-reveal>
           <p class="font-sans text-sm tracking-[0.12em] text-secondary mb-5">Location · Địa điểm</p>
           <h2 class="font-display text-5xl md:text-6xl font-light mb-4">Lacasa</h2>
           <p class="font-sans text-base md:text-lg text-primary mb-2">District 2, Ho Chi Minh City</p>
@@ -672,7 +1007,7 @@
           </a>
         </div>
 
-        <div class="photo aspect-[4/3] mx-auto w-full max-w-md">
+        <div class="photo aspect-[4/3] mx-auto w-full max-w-md" data-reveal data-reveal-delay="1">
           <img src="Lacasa photo.webp" alt="Lacasa riverside venue at sunset">
         </div>
 
@@ -681,27 +1016,27 @@
       <!-- Timeline -->
       <div class="max-w-3xl mx-auto">
         <p class="font-sans text-sm tracking-[0.12em] text-secondary mb-8 text-center">Timeline · Chương trình</p>
-        <div class="grid sm:grid-cols-3 gap-10 sm:gap-8 text-center">
+        <div class="grid sm:grid-cols-3 gap-10 sm:gap-8 text-center" data-reveal data-reveal-delay="2">
           <div>
             <p class="font-display text-4xl text-primary font-light">5:00 PM</p>
-            <p class="font-sans text-base tracking-wide text-primary mt-2">Vows</p>
-            <p class="font-serif text-lg italic text-secondary">Lễ Nguyện Ước</p>
+            <p class="font-sans text-base tracking-wide text-primary mt-2 text-balance">Ceremony</p>
+            <p class="font-serif text-lg italic text-secondary">Lễ Thành Hôn</p>
           </div>
           <div>
             <p class="font-display text-4xl text-primary font-light">6:00 PM</p>
-            <p class="font-sans text-base tracking-wide text-primary mt-2">Dinner</p>
+            <p class="font-sans text-base tracking-wide text-primary mt-2 text-balance">Dinner</p>
             <p class="font-serif text-lg italic text-secondary">Khai Tiệc</p>
           </div>
           <div>
             <p class="font-display text-4xl text-primary font-light">Evening</p>
-            <p class="font-sans text-base tracking-wide text-primary mt-2">Music &amp; Dancing</p>
-            <p class="font-serif text-lg italic text-secondary">Khiêu Vũ Bên Sông</p>
+            <p class="font-sans text-base tracking-wide text-primary mt-2 text-balance">Celebration</p>
+            <p class="font-serif text-lg italic text-secondary">Tiệc Mừng</p>
           </div>
         </div>
 
         <div class="w-full max-w-md mx-auto h-px bg-edge mt-12 mb-8"></div>
 
-        <p class="font-sans text-sm text-secondary text-center tracking-wide">
+        <p class="font-sans text-sm text-secondary text-center tracking-wide" data-reveal data-reveal-delay="3">
           Dress code: Semi-formal · Light colors encouraged
         </p>
       </div>
@@ -710,10 +1045,10 @@
   </section>
 
   <!-- RSVP Section -->
-  <section id="rsvp" class="bg-soft border-t border-edge py-24 md:py-32">
+  <section id="rsvp" class="rsvp-section bg-soft border-t border-edge py-24 md:py-32">
     <div class="w-full max-w-xl mx-auto px-6">
 
-      <header class="text-center mb-12">
+      <header class="rsvp-header-full text-center mb-12" data-reveal>
         <p class="font-sans text-sm tracking-[0.12em] text-secondary mb-4">Response</p>
         <h2 class="font-display text-5xl md:text-6xl font-light mb-3">RSVP</h2>
         <p class="font-sans text-base text-secondary">
@@ -721,13 +1056,17 @@
         </p>
       </header>
 
-      <form id="rsvp-form" method="POST" class="bg-panel border border-edge rounded-lg p-7 md:p-10 space-y-8">
+      <header class="rsvp-header-condensed" data-reveal>
+        <h2>RSVP</h2>
+      </header>
+
+      <form id="rsvp-form" method="POST" class="bg-panel border border-edge rounded-lg p-7 md:p-10 space-y-8" data-reveal data-reveal-delay="1">
 
         <div>
           <label for="full-name" class="block font-sans text-sm font-medium tracking-wide text-primary mb-1">
             Full name
           </label>
-          <p class="font-sans text-sm text-secondary mb-2">Họ &amp; Tên</p>
+          <p class="font-sans text-sm rsvp-hint mb-2">Họ &amp; Tên</p>
           <input
             type="text" id="full-name" name="full-name" required autocomplete="name"
             class="rsvp-input"
@@ -736,7 +1075,7 @@
 
         <fieldset class="border-0 p-0 m-0">
           <legend class="block font-sans text-sm font-medium tracking-wide text-primary mb-1">Will you be joining us?</legend>
-          <p class="font-sans text-sm text-secondary mb-3">Bạn sẽ tham dự chứ?</p>
+          <p class="font-sans text-sm rsvp-hint mb-3">Bạn sẽ tham dự chứ?</p>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div class="relative">
               <input type="radio" id="attending-yes" name="attendance" value="accepts" class="attend-radio" required>
@@ -747,7 +1086,7 @@
                 </svg>
                 <span class="min-w-0">
                   <span class="block font-sans text-sm text-primary whitespace-nowrap">Accept</span>
-                  <span class="block font-serif text-sm italic text-secondary mt-0.5 whitespace-nowrap">Tham dự</span>
+                  <span class="block font-serif text-sm italic rsvp-hint mt-0.5 whitespace-nowrap">Tham dự</span>
                 </span>
               </label>
             </div>
@@ -760,7 +1099,7 @@
                 </svg>
                 <span class="min-w-0">
                   <span class="block font-sans text-sm text-primary whitespace-nowrap">Decline</span>
-                  <span class="block font-serif text-sm italic text-secondary mt-0.5 whitespace-nowrap">Không thể tham dự</span>
+                  <span class="block font-serif text-sm italic rsvp-hint mt-0.5 whitespace-nowrap">Không thể tham dự</span>
                 </span>
               </label>
             </div>
@@ -769,7 +1108,7 @@
 
         <fieldset id="guest-count-group" class="border-0 p-0 m-0 hidden">
           <legend class="block font-sans text-sm font-medium tracking-wide text-primary mb-1">Who will be attending?</legend>
-          <p class="font-sans text-sm text-secondary mb-3">Ai sẽ tham dự?</p>
+          <p class="font-sans text-sm rsvp-hint mb-3">Ai sẽ tham dự?</p>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div class="relative">
               <input type="radio" id="guest-myself" name="guest-count" value="myself" class="attend-radio" checked>
@@ -777,7 +1116,7 @@
                 <span class="attend-dot"></span>
                 <span class="min-w-0">
                   <span class="block font-sans text-sm text-primary whitespace-nowrap">Just me</span>
-                  <span class="block font-serif text-sm italic text-secondary mt-0.5 whitespace-nowrap">Chỉ mình tôi</span>
+                  <span class="block font-serif text-sm italic rsvp-hint mt-0.5 whitespace-nowrap">Chỉ mình tôi</span>
                 </span>
               </label>
             </div>
@@ -787,7 +1126,7 @@
                 <span class="attend-dot"></span>
                 <span class="min-w-0">
                   <span class="block font-sans text-sm text-primary whitespace-nowrap">Me + guest</span>
-                  <span class="block font-serif text-sm italic text-secondary mt-0.5 whitespace-nowrap">Tôi và người đi cùng</span>
+                  <span class="block font-serif text-sm italic rsvp-hint mt-0.5 whitespace-nowrap">Tôi và người đi cùng</span>
                 </span>
               </label>
             </div>
@@ -797,7 +1136,7 @@
             <label for="guest-name" class="block font-sans text-sm font-medium tracking-wide text-primary mb-1">
               Guest name
             </label>
-            <p class="font-sans text-sm text-secondary mb-2">Tên người đi cùng</p>
+            <p class="font-sans text-sm rsvp-hint mb-2">Tên người đi cùng</p>
             <input
               type="text" id="guest-name" name="guest-name"
               class="rsvp-input"
@@ -806,16 +1145,15 @@
           </div>
         </fieldset>
 
-        <div class="border-t border-edge/60 pt-6 space-y-5">
-          <p class="font-sans text-xs tracking-[0.1em] text-secondary/70 text-center">
-            Optional · Không bắt buộc
-          </p>
+        <details class="rsvp-optional-details" id="rsvp-optional-details" open>
+          <summary>Optional</summary>
+          <div class="rsvp-optional-inner space-y-5">
 
           <div>
-            <label for="dietary" class="block font-sans text-sm text-secondary mb-1">
+            <label for="dietary" class="block font-sans text-sm font-medium tracking-wide text-primary mb-1">
               Dietary restrictions
             </label>
-            <p class="font-sans text-xs text-secondary/60 mb-2">Lưu ý dị ứng</p>
+            <p class="font-sans text-xs rsvp-hint mb-2">Lưu ý dị ứng</p>
             <input
               type="text" id="dietary" name="dietary"
               class="rsvp-input rsvp-input--optional"
@@ -824,17 +1162,18 @@
           </div>
 
           <div>
-            <label for="song" class="block font-sans text-sm text-secondary mb-1">
+            <label for="song" class="block font-sans text-sm font-medium tracking-wide text-primary mb-1">
               Song request (optional)
             </label>
-            <p class="font-sans text-xs text-secondary/60 mb-2">Gửi tặng ca khúc</p>
+            <p class="font-sans text-xs rsvp-hint mb-2">Gửi tặng ca khúc</p>
             <input
               type="text" id="song" name="song"
               class="rsvp-input rsvp-input--optional"
               placeholder="What's your jam for the night?"
             >
           </div>
-        </div>
+          </div>
+        </details>
 
         <button type="submit" class="rsvp-submit" id="rsvp-submit-btn">
           Submit RSVP · Gửi xác nhận
@@ -847,7 +1186,7 @@
   </section>
 
   <!-- Closing cinematic section -->
-  <section class="relative w-full h-[50vh] md:h-[60vh] overflow-hidden -mt-12 md:-mt-24">
+  <section class="site-full-only relative w-full h-[50vh] md:h-[60vh] overflow-hidden -mt-12 md:-mt-24">
     <img src="Da Lat Pre-shoots/Wide Nature Shot.JPG" alt="Tan and Thao in Da Lat"
          class="absolute inset-0 w-full h-full object-cover object-[85%_68%]">
     <div class="absolute inset-0" style="background:
@@ -855,13 +1194,145 @@
       linear-gradient(to top, #0E0E11 0%, rgba(14,14,17,0) 300px);"></div>
   </section>
 
-  <!-- Footer -->
-  <footer class="py-16 md:py-20 text-center">
-    <p class="font-display text-3xl md:text-4xl font-light tracking-[0.08em]">Tan <span class="text-secondary">&amp;</span> Thao</p>
+  <!-- Footer (full site) -->
+  <footer class="site-full-only py-16 md:py-20 text-center" data-reveal>
+    <p class="site-footer__signature">
+      <span>Tan</span><span class="site-footer__and">&amp;</span><span>Thao</span>
+    </p>
     <p class="font-sans text-xs tracking-[0.25em] text-secondary mt-4">August 7, 2026</p>
   </footer>
 
+  <!-- Condensed extras + footer -->
+  <div class="site-condensed-only condensed-extras-wrap">
+    <details class="condensed-event-details">
+      <summary>Event details · Chi tiết</summary>
+      <div class="condensed-extras__body">
+        <p>5PM Ceremony · 6PM Dinner · Evening celebration</p>
+        <p class="mt-2">Dress code: Semi-formal · Light colors encouraged</p>
+        <p class="mt-3">
+          <a href="https://share.google/FCYQBPn6TT4AVnYfr" target="_blank" rel="noopener noreferrer">View map · Xem bản đồ</a>
+        </p>
+      </div>
+    </details>
+  </div>
+  <footer class="site-condensed-only condensed-footer">
+    <p class="font-sans text-xs tracking-[0.2em] text-secondary">Tan &amp; Thao · August 7, 2026</p>
+  </footer>
+
   <script src="rsvp-config.js"></script>
+  <script>
+    (function () {
+      var STORAGE_KEY = 'wedding-site-variant';
+      var optionalDetails = document.getElementById('rsvp-optional-details');
+      var revealObserver = null;
+
+      function initReveal(options) {
+        options = options || {};
+        var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (options.resetHero) {
+          document.querySelectorAll('.hero-intro').forEach(function (el) {
+            el.classList.remove('is-loaded');
+          });
+        }
+        if (options.resetCondensed) {
+          document.querySelectorAll('#top-condensed [data-reveal]').forEach(function (el) {
+            el.classList.remove('is-visible');
+          });
+        }
+
+        if (prefersReduced) {
+          document.querySelectorAll('[data-reveal]').forEach(function (el) {
+            el.classList.add('is-visible');
+          });
+          document.querySelectorAll('.hero-intro').forEach(function (el) {
+            el.classList.add('is-loaded');
+          });
+          return;
+        }
+
+        if (revealObserver) {
+          revealObserver.disconnect();
+        }
+
+        revealObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-visible');
+            revealObserver.unobserve(entry.target);
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+
+        document.querySelectorAll('[data-reveal]').forEach(function (el) {
+          if (!el.classList.contains('is-visible')) {
+            revealObserver.observe(el);
+          }
+        });
+
+        if (options.resetHero) {
+          requestAnimationFrame(function () {
+            document.querySelectorAll('.hero-intro').forEach(function (el) {
+              el.classList.add('is-loaded');
+            });
+          });
+        } else if (!document.querySelector('.hero-intro.is-loaded')) {
+          requestAnimationFrame(function () {
+            document.querySelectorAll('.hero-intro').forEach(function (el) {
+              el.classList.add('is-loaded');
+            });
+          });
+        }
+      }
+
+      function syncPrototypeButtons() {
+        var site = document.body.dataset.site || 'full';
+        document.querySelectorAll('[data-site-toggle]').forEach(function (btn) {
+          btn.classList.toggle('is-active', btn.getAttribute('data-site-toggle') === site);
+        });
+      }
+
+      function syncOptionalDetails() {
+        if (!optionalDetails) return;
+        if (document.body.dataset.site === 'condensed') {
+          optionalDetails.removeAttribute('open');
+        } else {
+          optionalDetails.setAttribute('open', '');
+        }
+      }
+
+      function setSite(site) {
+        document.body.dataset.site = site;
+        localStorage.setItem(STORAGE_KEY, site);
+        syncPrototypeButtons();
+        syncOptionalDetails();
+        initReveal({
+          resetHero: site === 'full',
+          resetCondensed: site === 'condensed'
+        });
+        var params = new URLSearchParams(location.search);
+        params.set('site', site);
+        var query = params.toString();
+        history.replaceState(null, '', location.pathname + (query ? '?' + query : '') + location.hash);
+      }
+
+      document.querySelectorAll('[data-site-toggle]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          setSite(btn.getAttribute('data-site-toggle'));
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+
+      syncPrototypeButtons();
+      syncOptionalDetails();
+      initReveal();
+      var params = new URLSearchParams(location.search);
+      if (params.get('site') !== document.body.dataset.site) {
+        params.set('site', document.body.dataset.site);
+        var query = params.toString();
+        history.replaceState(null, '', location.pathname + (query ? '?' + query : '') + location.hash);
+      }
+    })();
+  </script>
   <script>
     (function () {
       const form = document.getElementById('rsvp-form');

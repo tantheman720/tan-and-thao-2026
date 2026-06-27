@@ -27,7 +27,7 @@ if [[ ! -x "$NODE_DIR/node" ]]; then
 fi
 
 export PATH="$NODE_DIR:$PATH"
-PROJECT_NAME="${CF_PAGES_PROJECT:-tanandthao}"
+PROJECT_NAME="${CF_PAGES_PROJECT:-rsvp-tan-thao-wedding}"
 
 echo "Deploying to Cloudflare Pages project: $PROJECT_NAME"
 npx --yes wrangler@4 pages deploy "$ROOT" \

@@ -1,5 +1,5 @@
 # Cloudflare Pages — Git auto-deploy
-# Live URL: https://tan-and-thao-2026.pages.dev
+# Live URL: https://rsvp-tan-thao-wedding.pages.dev
 # Repo: tan-and-thao-2026 (GitHub)
 #
 # Build command: (empty)

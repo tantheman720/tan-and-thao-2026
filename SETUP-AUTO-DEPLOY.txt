@@ -1,7 +1,7 @@
 GitHub + Cloudflare auto-deploy
 ==============================
 
-Live site: https://tan-and-thao-2026.pages.dev
+Live site: https://rsvp-tan-thao-wedding.pages.dev
 
 ONE-TIME SETUP
 --------------
@@ -21,7 +21,7 @@ ONE-TIME SETUP
    ./scripts/setup-auto-deploy.sh
 
 4. Connect Cloudflare to GitHub
-   - https://dash.cloudflare.com → Workers & Pages → tan-and-thao-2026
+   - https://dash.cloudflare.com → Workers & Pages → rsvp-tan-thao-wedding
    - Settings → Builds & deployments → Connect to Git
    - Select repo: tan-and-thao-2026
    - Build command: (empty)
@@ -38,7 +38,7 @@ DAY-TO-DAY (edit in Cursor → go live)
 1. Edit files in Cursor (index.html, photos, rsvp-config.js, etc.)
 2. Terminal:
    ./scripts/push-live.sh "Describe your change"
-3. Wait ~1–2 min → refresh https://tan-and-thao-2026.pages.dev
+3. Wait ~1–2 min → refresh https://rsvp-tan-thao-wedding.pages.dev
 
 OPTIONAL: install Git for simpler pushes
    xcode-select --install
